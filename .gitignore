@@ -1,0 +1,6 @@
+node_modules/
+dist/
+web/app.js
+web/app.js.map
+*.kude
+!web/esimerkit/*.kude

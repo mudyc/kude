@@ -1,0 +1,32 @@
+{
+  "name": "kude",
+  "version": "0.1.0",
+  "description": "Kude: resursseja ja linkkejä yhdessä pienessä tiedostossa",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "kude": "dist/cli/kude.js"
+  },
+  "exports": {
+    ".": "./dist/core/index.js"
+  },
+  "files": [
+    "dist",
+    "web"
+  ],
+  "scripts": {
+    "build": "npm run build:lib && npm run build:web",
+    "build:lib": "tsc -p tsconfig.build.json && chmod +x dist/cli/kude.js",
+    "build:web": "esbuild src/web/app.ts --bundle --format=esm --target=es2022 --minify --sourcemap --outfile=web/app.js",
+    "dev": "esbuild src/web/app.ts --bundle --format=esm --target=es2022 --sourcemap --outfile=web/app.js --servedir=web --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "example": "npm run build:lib && node examples/rakenna.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "esbuild": "^0.28.2",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.5"
+  }
+}
