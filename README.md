@@ -4,7 +4,7 @@
 Resurssi on tekstipala, kuva tai mikä tahansa muu tavujoukko, ja sen nimi on sen hash.
 Linkki on kolmikko: mistä, predikaatti, mihin. Blogin lukujärjestys on `seuraava`-linkkien ketju.
 
-Määrittely: [Anything is linkable](https://claude.ai/artifact/1KFh5XGoMksSgrFoensuo9).
+Määrittely: [Anything is linkable](https://claude.ai/artifact/1KFh5XGoMksSgrFoensuo9). Tekninen kuvaus englanniksi: [docs/technical-description.md](docs/technical-description.md).
 
 Tämä repo sisältää:
 
