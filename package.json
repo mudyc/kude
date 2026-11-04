@@ -3,12 +3,17 @@
   "version": "0.1.0",
   "description": "Kude: resursseja ja linkkejä yhdessä pienessä tiedostossa",
   "type": "module",
+  "main": "./dist/core/index.js",
+  "types": "./dist/core/index.d.ts",
   "license": "MIT",
   "bin": {
     "kude": "dist/cli/kude.js"
   },
   "exports": {
-    ".": "./dist/core/index.js"
+    ".": {
+      "types": "./dist/core/index.d.ts",
+      "default": "./dist/core/index.js"
+    }
   },
   "files": [
     "dist",
@@ -21,7 +26,8 @@
     "dev": "esbuild src/web/app.ts --bundle --format=esm --target=es2022 --sourcemap --outfile=web/app.js --servedir=web --watch",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "example": "npm run build:lib && node examples/rakenna.mjs"
+    "example": "npm run build:lib && node examples/rakenna.mjs",
+    "prepare": "npm run build:lib"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",

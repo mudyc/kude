@@ -193,6 +193,19 @@ export class Kude {
     return r;
   }
 
+  /**
+   * Lisää linkatun resurssin, jonka hash on jo tiedossa. Tavut voivat olla toisaalla
+   * (esim. selain lähetti ne suoraan tallennukseen); hash tarkistetaan, kun ne ladataan.
+   */
+  addLinkedHash(url: string, hash: string, mime: string, opts: AddOptions = {}): Resource {
+    if (!FULL_HASH.test(hash)) throw new KudeError(`virheellinen hash: ${hash}`);
+    const existing = this.get(hash);
+    if (existing) return existing;
+    const r: Resource = { hash, mime, url, time: opts.time ?? now(), author: opts.author, extra: opts.extra };
+    this.resources.push(r);
+    return r;
+  }
+
   // ---- linkit ----
 
   link(from: string, predicate: string, to: string): Link {

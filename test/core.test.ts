@@ -257,3 +257,38 @@ describe("markdown-jakaja", () => {
     expect(await hashOf(utf8(blocks[1]!))).toBe(await hashOf(utf8("B")));
   });
 });
+
+describe("arvot ja linkatut resurssit", () => {
+  it("data:-osoite ja toisen kuteen osoite säilyvät linkin päinä", async () => {
+    const k = await Kude.create({ "@type": "Thing", name: "talo" });
+    const a = await k.add(utf8('{"id":"a"}'), "application/json");
+    k.link(a.hash, "bs:hormeja", "data:,2");
+    k.link(a.hash, "bs:nimi", "data:,Piipun%20juuri");
+    k.link(a.hash, "bs:tyyppi", "bs:tyyppi/savupiippu");
+    k.link(a.hash, "bs:liittyy", "kude:estate:123/common#abcdef1234567890");
+    const back = await open(await encode(k));
+    expect(back.linksFrom(a.hash).map((l) => l.to)).toEqual([
+      "data:,2",
+      "data:,Piipun%20juuri",
+      "bs:tyyppi/savupiippu",
+      "kude:estate:123/common#abcdef1234567890",
+    ]);
+    expect(parseAddress("kude:estate:123/common#abcdef1234567890")).toEqual({
+      kind: "named",
+      author: "estate:123",
+      name: "common",
+      fragment: "abcdef1234567890",
+    });
+  });
+
+  it("linkatun resurssin voi lisätä pelkällä hashilla", async () => {
+    const k = await Kude.create({ "@type": "Thing" });
+    const hash = await hashOf(utf8("kuva"));
+    k.addLinkedHash("photos/x.jpg", hash, "image/jpeg");
+    expect(() => k.addLinkedHash("x", "abc", "image/jpeg")).toThrow(KudeError);
+    const back = await open(await encode(k));
+    expect(back.get(hash)?.url).toBe("photos/x.jpg");
+    back.fetcher = async () => utf8("kuva");
+    expect(await back.text(hash)).toBe("kuva");
+  });
+});
